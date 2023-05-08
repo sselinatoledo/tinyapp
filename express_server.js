@@ -16,9 +16,9 @@ app.get("/urls/new", (req, res) => {
   });
 
 app.get("/urls/:id", (req, res) => {
-    const id = req.params.id;
-    const longURL = urlDatabase[id];
-    const templateVars = { id, longURL }
+    const shortURL = req.params.id;
+    const longURL = urlDatabase[shortURL];
+    const templateVars = { shortURL, longURL }
     res.render("urls_show", templateVars);
   });
 
@@ -48,6 +48,15 @@ app.post("/urls", (req, res) => {
     const shortURL = generateRandomString();
     urlDatabase[shortURL] = longURL;
     res.redirect(`/urls/${shortURL}`)
+  });
+
+  app.get("/u/:id", (req, res) => {
+    const longURL = urlDatabase[req.params.id];
+    if (longURL) {
+      res.redirect(longURL);
+    } else {
+      res.status(404).send("Short URL not found");
+    }
   });
 
 app.listen(PORT, () => {
