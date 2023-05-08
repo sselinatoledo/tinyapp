@@ -1,12 +1,3 @@
-const generateRandomString = function(length, characters) {
-  let result = "";
-  const charactersLength = characters.length;
-  for (let i in length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
-
 const express = require("express");
 const app = express();
 const PORT = 8080;
@@ -48,9 +39,15 @@ app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+const generateRandomString = () => {
+  return Math.random().toString(36).substring(2,8)
+}
+
 app.post("/urls", (req, res) => {
-    console.log(req.body); // Log the POST request body to the console
-    res.send("Ok"); // Respond with 'Ok' (we will replace this)
+    const longURL = req.body.longURL;
+    const shortURL = generateRandomString();
+    urlDatabase[shortURL] = longURL;
+    res.redirect(`/urls/${shortURL}`)
   });
 
 app.listen(PORT, () => {
