@@ -1,3 +1,12 @@
+const generateRandomString = function(length, characters) {
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i in length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 const express = require("express");
 const app = express();
 const PORT = 8080;
