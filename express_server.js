@@ -9,7 +9,12 @@ const urlDatabase = {
     "9sm5xK": "http://www.google.com"
 };
 
-// Route to display a single URL and its shortened form.
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/urls/new", (req, res) => {
+    res.render("urls_new");
+  });
+
 app.get("/urls/:id", (req, res) => {
     const id = req.params.id;
     const longURL = urlDatabase[id];
@@ -33,6 +38,11 @@ app.get("/urls.json", (req, res) => {
 app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
+
+app.post("/urls", (req, res) => {
+    console.log(req.body); // Log the POST request body to the console
+    res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  });
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}!`);
