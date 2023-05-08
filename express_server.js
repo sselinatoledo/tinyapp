@@ -9,6 +9,14 @@ const urlDatabase = {
     "9sm5xK": "http://www.google.com"
 };
 
+// Route to display a single URL and its shortened form.
+app.get("/urls/:id", (req, res) => {
+    const id = req.params.id;
+    const longURL = urlDatabase[id];
+    const templateVars = { id, longURL }
+    res.render("urls_show", templateVars);
+  });
+
 app.get("/urls", (req, res) => {
     const templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
