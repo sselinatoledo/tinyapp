@@ -11,11 +11,13 @@ function generateRandomString() {
 const express = require("express");
 const app = express();
 const PORT = 8080;
+const cookieParser = require('cookie-parser');
 
 app.set("view engine", "ejs")
 
 // 4. Adding the middleware to parse the request body and make it readble.
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -78,6 +80,14 @@ app.post('/urls/:id', (req, res) => {
   urlDatabase[id] = newLongURL;
   res.redirect('/urls');
 });
+
+// 9. LOGIN INFORMATION
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  res.cookie('username', username);
+  res.redirect('/urls');
+});
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
