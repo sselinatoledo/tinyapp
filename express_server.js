@@ -24,21 +24,29 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+
+
+// S1 - Route root that returns a simple "Hello!".
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// S2 - Route that returns jason representation of the database.
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// S3 - Route that returns "Hello World" in bold.
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 // 1. SENDING DATA TO urls_index.ejs.
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    username: req.cookies["username"],
+    urls: urlDatabase 
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -60,7 +68,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-// 6. REDIRECT TO ITS longURL.
+// S4 - Route to redirect short URLs to their long URLS
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
@@ -81,13 +89,12 @@ app.post('/urls/:id', (req, res) => {
   res.redirect('/urls');
 });
 
-// 9. LOGIN INFORMATION
+// 9. Add log in 
 app.post('/login', (req, res) => {
   const username = req.body.username;
-  res.cookie('username', username);
+  res.cookie('username', username)
   res.redirect('/urls');
 });
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
