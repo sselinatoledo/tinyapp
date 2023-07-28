@@ -8,6 +8,10 @@ const urlDatabase = {
 };
 
 app.use(express.urlencoded({ extended: true }));
+app.post("/urls", (req, res) => {
+    console.log(req.body); 
+    res.send("Ok"); 
+  });
 
 app.set("view engine", "ejs");
 
@@ -41,3 +45,25 @@ app.get("/urls/:id", (req, res) => {
     res.render("urls_show", templateVars);
 });
 
+app.post("/urls", (req, res) => {
+    const shortURL = generateRandomString();
+    const longURL = req.body.longURL;
+    urlDatabase[shortURL] = longURL;
+    res.redirect(`/urls/${shortURL}`);
+  });
+
+  app.get("/u/:id", (req, res) => {
+    const longURL = urlDatabase[req.params.id];
+    res.redirect(longURL);
+  });
+
+function generateRandomString() {
+    let result = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 6; i++) {
+
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
