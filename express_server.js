@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 8080;  //default port 8080
 
@@ -7,7 +8,15 @@ const urlDatabase = {
     "9sm5xK": "http://www.google.com"
 };
 
+app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: true }));
+
+app.post("/login", (req, res) => {
+    const { username } = req.body;
+    res.cookie("username", username);
+    res.redirect("/urls");
+  });
 
 app.post('/urls/:id', (req, res) => {
     const urlId = req.params.id;
