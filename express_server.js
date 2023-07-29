@@ -9,6 +9,12 @@ const urlDatabase = {
 
 app.use(express.urlencoded({ extended: true }));
 
+app.post('/urls/:id', (req, res) => {
+    const urlId = req.params.id;
+    urlDatabase[urlId] = req.body.longURL;
+    res.redirect('/urls');
+  });
+
 app.post("/urls/:id/delete", (req, res) => {
     const urlId = req.params.id;
     delete urlDatabase[urlId];
