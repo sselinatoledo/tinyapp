@@ -18,33 +18,15 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
       <nav>
-        <% if (user) { %>
-          <span>Welcome, <%= user.email %>!</span>
-          <form action="/logout" method="POST">
-            <button>Logout</button>
-          </form>
-        <% } else { %>
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        <% } %>
+        <ul>
+          <% if (!user) { %>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+          <% } else { %>
+            <span>Welcome, <%= user.email %>!</span>
+            <form action="/logout" method="POST">
+                <button type="submit">Logout</button></form>
+          <% } %>
+        </ul>
       </nav>
-      <nav>
-    <% if (user) { %>
-        Logged in as: <%= user.email %>!
-          <form class="form-inline ml-auto" method="POST" action="/logout">
-              <input class="form-control mr-sm-2" type="text" placeholder="Username" name="username">
-            <button type="submit">Logout</button>
-          </form>
-        <% } else { %>
-          <form class="form-inline ml-auto" method="POST" action="/login">
-            <label>
-              Username:
-              <input type="text" name="username">
-            </label>
-            <button type="submit">Login</button>
-          </form>
-        <% } %>
-        </div>
-    </div>
-  </nav>
 </header>
