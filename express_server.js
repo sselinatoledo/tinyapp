@@ -12,19 +12,70 @@ app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 
+const users = {
+    userRandomID: {
+      id: "user1RandomID",
+      email: "user1@example.com",
+      password: "user1234",
+    },
+    user2RandomID: {
+      id: "user2RandomID",
+      email: "user2@example.com",
+      password: "user5678",
+    },
+  };
+
+  function getUserByEmail(email, users) {
+    for (const userId in users) {
+      const user = users[userId];
+      if (user.email === email) {
+        return user;
+      }
+    }
+    return null;
+  }
+function urlsForUser(userId, urlDatabase)
+{
+    const urls = [];
+    for (const shortURL in urlDatabase) {
+        const urlentry = urlDatabase[shortURL];
+        if(urlentry.userID === userId)
+        {
+            urls.push(urlentry);
+        }
+    }
+    return urls;
+}
+
+app.get('/register', (req, res) => {
+    res.render('register');
+  });
+
+  app.post("/register", (req, res) => {
+    const id = generateRandomString();
+    const { email, password } = req.body;
+    const newUser = {
+      id,
+      email,
+      password,
+    };
+    if (!email || !password) {
+      res.status(400).send("Please provide email and password.");
+    } else if (getUserByEmail(email, users)) {
+      res.status(400).send("This email is already registered.");
+    } else {
+      users[id] = newUser;
+      console.log(users);
+      res.cookie("user_id", id);
+      res.redirect("/urls");
+    }
+  });
+
 app.post("/login", (req, res) => {
     const { username } = req.body;
     res.cookie("username", username);
     res.redirect("/urls");
   });
-
-  app.get("/urls", (req, res) => {
-    const templateVars = {
-        urls: urlDatabase,
-        username: req.cookies.username
-    };
-    res.render("urls_index", templateVars);
-});
 
 app.post('/logout', (req, res) => {
     res.clearCookie('username');
@@ -42,11 +93,6 @@ app.post("/urls/:id/delete", (req, res) => {
     delete urlDatabase[urlId];
     res.redirect("/urls");
 })
-
-app.post("/urls", (req, res) => {
-    console.log(req.body); 
-    res.send("Ok"); 
-  });
 
 app.set("view engine", "ejs");
 
@@ -67,16 +113,22 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-    res.render("urls_new");
+    const user = users[req.cookies.user_id]
+    const templateVars = {user}
+    res.render("urls_new",templateVars);
 });
 
 app.get("/urls", (req, res) => {
-    const templateVars = { urls: urlDatabase };
+    const user = users[req.cookies.user_id]
+    console.log("inside /urls", users);
+    console.log(req.cookies);
+    const templateVars = { urls: urlsForUser(req.cookies.user_id, urlDatabase), user };
     res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
-    const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+    const user = users[req.cookies.user_id]
+    const templateVars = { id: req.params.id, user, longURL: urlDatabase[req.params.id] };
     res.render("urls_show", templateVars);
 });
 
