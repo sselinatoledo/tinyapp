@@ -18,6 +18,14 @@ app.post("/login", (req, res) => {
     res.redirect("/urls");
   });
 
+  app.get("/urls", (req, res) => {
+    const templateVars = {
+        urls: urlDatabase,
+        username: req.cookies.username
+    };
+    res.render("urls_index", templateVars);
+});
+
 app.post('/urls/:id', (req, res) => {
     const urlId = req.params.id;
     urlDatabase[urlId] = req.body.longURL;
