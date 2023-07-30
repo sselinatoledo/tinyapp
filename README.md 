@@ -4,11 +4,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-<img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;" src="https://raw.githubusercontent.com/sselinatoledo/tinyapp/master/docs/login.png" width="998" height="260">
+https://github.com/sselinatoledo/tinyapp/blob/90bc9605aaec036aa7a5052c4080db907a66ce16/docs/login.png
 
-https://raw.githubusercontent.com/sselinatoledo/tinyapp/master/docs/register.png
-
-https://raw.githubusercontent.com/sselinatoledo/tinyapp/master/docs/urls.png
+docs/register.png
 
 ## Dependencies
 
